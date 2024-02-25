@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useUser } from "../../stores/userStore";
 import { axiosClient } from "../../utils/axiosClient";
 import LoadingFallback from "../layouts/Loading";
+import { FaCloudUploadAlt } from "react-icons/fa";
+import { MdCancel } from "react-icons/md";
+import { RiImageEditLine } from "react-icons/ri";
 
 function Profile() {
   const [data, setData] = useState("");
@@ -11,6 +14,7 @@ function Profile() {
 
   const handleFileInputChange = (event) => {
     const file = event.target.files[0];
+
     const reader = new FileReader();
 
     reader.onload = () => {
@@ -21,9 +25,13 @@ function Profile() {
   };
   const up = async () => {
     setUpload(true);
+    let old = "";
+    if (user?.avatar?.public_id) {
+      old = user?.avatar?.public_id;
+    }
     return await axiosClient
       .post(
-        "/user/update/" + user._id,
+        "/user/update/" + user._id + "?old=" + old,
         { data },
         {
           withCredentials: true,
@@ -50,34 +58,51 @@ function Profile() {
     <div>
       <figure className="flex items-start sm:items-center ">
         <img
-          className="w-15 h-15 rounded-full"
+          className="w-[180px] rounded-full"
           src={!user?.avatar?.url ? "/vite.svg" : user?.avatar?.url}
           alt="avatar"
         />
       </figure>
-      <button
-        type="button"
-        className="bg-purple-700 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded"
-        onClick={() => {
-          setUpDate(!upDate);
-        }}
-      >
-        {" "}
-        {upDate ? "Cancel" : "Edit"}
-      </button>
+      {!upDate && (
+        <button
+          name="edit"
+          type="button"
+          className="bg-black text-white hover:bg-gray-800  font-bold py-2 px-4 rounded"
+          onClick={() => {
+            setUpDate(!upDate);
+          }}
+        >
+          <RiImageEditLine />
+        </button>
+      )}
       {upDate && (
         <>
           {" "}
           <input onChange={handleFileInputChange} type="file" />
           {!upload ? (
-            <button
-              type="button"
-              className="bg-purple-700 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded"
-              onClick={up}
-            >
-              {" "}
-              upload
-            </button>
+            <>
+              <button
+                type="button"
+                name="cancel"
+                className="bg-black text-white hover:bg-gray-800    font-bold py-2 px-4 rounded mr-10"
+                onClick={() => {
+                  setUpDate(false);
+                }}
+              >
+                {" "}
+                <MdCancel />
+              </button>
+              <button
+                type="button"
+                name="upload"
+                disabled={data.length == 0}
+                className="bg-black text-white hover:bg-gray-800  font-bold py-2 px-4 rounded"
+                onClick={up}
+              >
+                {" "}
+                <FaCloudUploadAlt />
+              </button>
+            </>
           ) : (
             <LoadingFallback />
           )}
@@ -86,7 +111,7 @@ function Profile() {
 
       <hr className="my-4" />
       <figcaption>
-        <h5 className="font-semibold text-lg">{user?.name}</h5>
+        {/* <h5 className="font-semibold text-lg">{user?.name}</h5> */}
         <p>
           <b>Email:</b> {user?.email}{" "}
         </p>

@@ -15,8 +15,21 @@ class UserController {
     }
   }
 
+  static async #destroyOldAvatar  (publicId)  {
+    return new Promise((resolve, reject) => {
+      cloudinary.uploader.destroy(publicId, function (error, result) {
+        if (error) {
+          console.log(error);
+          reject(error);
+        }
+        resolve(result);
+      });
+    });
+  };
+
   static async updateUser(req, res) {
     try {
+      console.log(req.params,req.query)
       dotenv.config();
       cloudinary.config({
         cloud_name: process.env.CLOUD_NAME,

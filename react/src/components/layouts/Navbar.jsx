@@ -42,19 +42,19 @@ export default function StickyNavbar() {
               className="relative transition-all duration-500"
             >
               <img
-                className=" w-[100px] rounded-full"
+                className=" w-[80px] rounded-full"
                 src={!user?.avatar?.url ? "/vite.svg" : user?.avatar?.url}
                 alt="avatar"
               />
               <div
                 className={`absolute ${
                   openAvatarDropdown ? "block" : "hidden"
-                } bg-pink-300 rounded shadow-md mt-2 space-y-2`}
+                } bg-purple-900 text-white 0 rounded shadow-md  space-y-2 w-[200px]`}
               >
                 <div className="p-4 flex flex-col w-100 ">
                   <Link to="/profile">
                     {" "}
-                    <MdAccountCircle />
+                    <MdAccountCircle name="profile" />
                     Profile
                   </Link>
                   <hr className="h-px  bg-gray-200 border-0 dark:bg-gray-700" />
@@ -80,11 +80,11 @@ export default function StickyNavbar() {
             </div>
           </li>
         )}
-        <li
-          className="p-4   transform transition duration-500 
+        {!user._id && (
+          <li
+            className="p-4   transform transition duration-500 
             hover:scale-150 rounded-xl m-2 cursor-pointer duration-300 hover:text-black "
-        >
-          {!user._id && (
+          >
             <Link
               name="login"
               className="btn"
@@ -95,8 +95,8 @@ export default function StickyNavbar() {
                 <IoLogIn /> Login
               </span>
             </Link>
-          )}
-        </li>
+          </li>
+        )}
       </ul>
 
       {/* Mobile Navigation Icon */}
@@ -113,14 +113,13 @@ export default function StickyNavbar() {
         }
       >
         {/* Mobile Logo */}
-        <h1 className="w-full text-3xl font-bold text-black m-4">DVLYX</h1>
         {/* Mobile Navigation Items */}
-        <li
-          className="ml-4 p-4  rounded-xl  duration-300 transform transition duration-500 
+        {!user._id && (
+          <li
+            className="ml-4 p-4  rounded-xl  duration-300 transform transition duration-500 
             hover:scale-110 cursor-pointer  w-[100%]"
-        >
-          {" "}
-          {!user._id && (
+          >
+            {" "}
             <div style={{ display: "flex" }}>
               {" "}
               <Link
@@ -133,19 +132,19 @@ export default function StickyNavbar() {
                 {}
               </Link>
             </div>
-          )}
-        </li>
+          </li>
+        )}
         {user._id && (
           <li
-            className="ml-4 p-4   rounded-xl  duration-300 transform transition duration-500 
-            hover:scale-110 cursor-pointer  w-[100%]"
+            className="ml-4 p-4   rounded-xl    w-[100%]"
           >
             <div
               onClick={toggleAvatarDropdown}
               className="relative  transition-all duration-500"
             >
               <img
-                className=" w-[60px] rounded-full"
+                className=" w-[60px] rounded-full duration-300 transform transition duration-500 
+                hover:scale-110 cursor-pointer"
                 src={!user?.avatar?.url ? "/vite.svg" : user?.avatar?.url}
                 alt="avatar"
               />{" "}
@@ -154,8 +153,14 @@ export default function StickyNavbar() {
                   openAvatarDropdown ? "block" : "hidden"
                 } bg-slate-300 rounded shadow-md mt-2 space-y-2`}
               >
-                <div className="p-4 flex flex-col bg-pink-300 ">
-                  <Link to="/profile">
+                <div className="p-4 flex flex-col bg-purple-900 text-white 0 rounded shadow-md  space-y-2 w-[200px] ">
+                  <Link
+                      onClick={() => {
+                        handleNav();
+                        toggleAvatarDropdown();
+                      }}
+                    to="/profile"
+                  >
                     <MdAccountCircle />
                     Profile
                   </Link>
