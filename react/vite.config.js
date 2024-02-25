@@ -8,11 +8,13 @@ export default defineConfig({
   plugins: [react(), viteCompression(), splitVendorChunkPlugin()],
   build: {
     outDir:"../dist",
+    cssCodeSplit:true,
     manifest:true,
     sourcemap:true,
     rollupOptions: {
       output: {
         manualChunks(id) {
+          console.log(id)
           // Split third-party dependencies into smaller chunks
           if (id.includes("node_modules")) {
             // Split common React-related dependencies

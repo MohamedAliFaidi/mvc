@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useUser } from "../../stores/userStore";
 import { logout } from "../../services/auth.service";
 import { useState } from "react";
@@ -7,7 +7,6 @@ import { IoLogIn, IoLogOut } from "react-icons/io5";
 import { MdAccountCircle } from "react-icons/md";
 
 export default function StickyNavbar() {
-  const navigate = useNavigate();
   const [user, setUser] = useUser((state) => [state.user, state.setUser]);
   const [nav, setNav] = useState(false);
 
@@ -42,7 +41,11 @@ export default function StickyNavbar() {
               onClick={toggleAvatarDropdown}
               className="relative transition-all duration-500"
             >
-              <span className="cursor-pointer">Avatar</span>
+              <img
+                className=" w-[100px] rounded-full"
+                src={!user?.avatar?.url ? "/vite.svg" : user?.avatar?.url}
+                alt="avatar"
+              />
               <div
                 className={`absolute ${
                   openAvatarDropdown ? "block" : "hidden"
@@ -118,7 +121,7 @@ export default function StickyNavbar() {
         >
           {" "}
           {!user._id && (
-            <div  style={{ display: "flex" }}>
+            <div style={{ display: "flex" }}>
               {" "}
               <Link
                 name="login"
@@ -141,7 +144,11 @@ export default function StickyNavbar() {
               onClick={toggleAvatarDropdown}
               className="relative  transition-all duration-500"
             >
-              <span className="cursor-pointer">Avatar</span>
+              <img
+                className=" w-[60px] rounded-full"
+                src={!user?.avatar?.url ? "/vite.svg" : user?.avatar?.url}
+                alt="avatar"
+              />{" "}
               <div
                 className={`absolute ${
                   openAvatarDropdown ? "block" : "hidden"
@@ -149,10 +156,10 @@ export default function StickyNavbar() {
               >
                 <div className="p-4 flex flex-col bg-pink-300 ">
                   <Link to="/profile">
-                  <MdAccountCircle />
-
-                    Profile</Link>
-                    <hr className="h-px  bg-gray-200 border-0 dark:bg-gray-700" />
+                    <MdAccountCircle />
+                    Profile
+                  </Link>
+                  <hr className="h-px  bg-gray-200 border-0 dark:bg-gray-700" />
 
                   {/* <Link to="/dashboard">Dashboard</Link> */}
                   <Link
@@ -166,7 +173,6 @@ export default function StickyNavbar() {
                     }}
                   >
                     <IoLogOut /> Logout
-                  
                   </Link>
                 </div>
               </div>

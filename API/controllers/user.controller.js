@@ -44,9 +44,9 @@ class UserController {
           public_id: result.public_id,
           url: result.secure_url,
         },
-      });
+      })
 
-      res.status(200).json({ message: "updated with success" });
+      res.status(200).json({ message: "updated with success",avatar : result});
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "error while uploading your file" });
