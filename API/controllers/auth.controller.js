@@ -24,6 +24,7 @@ class UserController {
   static async login(req, res) {
     try {
       const isUser = await User.findOne({ email: req.body.email });
+      console.log(isUser)
       if (!isUser) {
         return res.status(400).json({ message: "user not found" });
       }
@@ -44,6 +45,7 @@ class UserController {
             email: isUser.email,
             _id: isUser._id,
             role: isUser.role,
+            avatar:isUser.avatar || null
           },
         });
     } catch (error) {
