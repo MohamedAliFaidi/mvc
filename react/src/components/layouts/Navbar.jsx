@@ -16,175 +16,146 @@ export default function StickyNavbar() {
     setOpenAvatarDropdown(!openAvatarDropdown);
   };
 
-  // Toggle function to handle the navbar's display
   const handleNav = () => {
     setNav(!nav);
   };
 
   return (
-    <div className="nav-bg flex justify-between items-center h-24 max-w-[1240px] mx-auto px-4 text-black">
-      {/* Logo */}
-      <Link
-        to="/"
-        className="w-full text-3xl font-bold text-black cursor-pointer"
-      >
-        DVLYX
-      </Link>
-      {/* Desktop Navigation */}
-      <ul className="hidden md:flex">
-        {user._id && (
-          <li
-            className="p-4  transform transition duration-500 
-            hover:scale-110 rounded-xl m-2 cursor-pointer duration-300 hover:text-black "
-          >
-            <div
-              onClick={toggleAvatarDropdown}
-              className="relative transition-all duration-500"
-            >
-              <img
-                className=" w-[80px] rounded-full"
-                src={!user?.avatar?.url ? "/vite.svg" : user?.avatar?.url}
-                alt="avatar"
-              />
-              <div
-                className={`absolute ${
-                  openAvatarDropdown ? "block" : "hidden"
-                } bg-purple-900 text-white 0 rounded shadow-md  space-y-2 w-[200px]`}
-              >
-                <div className="p-4 flex flex-col w-100 ">
-                  <Link to="/profile">
-                    {" "}
-                    <MdAccountCircle name="profile" />
-                    Profile
-                  </Link>
-                  <hr className="h-px  bg-gray-200 border-0 dark:bg-gray-700" />
-
-                  {/* <Link to="/dashboard">Dashboard</Link> */}
-                  {/* <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"/> */}
-
-                  <Link
-                    name="logout"
-                    variant="gradient"
-                    size="sm"
-                    className="bg-auto"
-                    onClick={() => {
-                      logout();
-                      setUser({});
-                    }}
-                  >
-                    <IoLogOut />
-                    Logout
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </li>
-        )}
-        {!user._id && (
-          <li
-            className="p-4   transform transition duration-500 
-            hover:scale-150 rounded-xl m-2 cursor-pointer duration-300 hover:text-black "
-          >
-            <Link
-              name="login"
-              className="btn"
-              style={{ float: "right" }}
-              to="/login"
-            >
-              <span>
-                <IoLogIn /> Login
-              </span>
-            </Link>
-          </li>
-        )}
-      </ul>
-
-      {/* Mobile Navigation Icon */}
-      <div onClick={handleNav} className="md:hidden nav-bg">
-        {nav ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
-      </div>
-
-      {/* Mobile Navigation Menu */}
-      <ul
-        className={
-          nav
-            ? "fixed md:hidden left-0 top-0 w-[60%] h-full bg-gradient-to-r from-purple-100 via-purple-300 to-pink-200 duration-500 z-50"
-            : "ease-in-out w-[100%] duration-500 fixed top-0 bottom-0 left-[-100%] nav-bg"
-        }
-      >
-        {/* Mobile Logo */}
-        {/* Mobile Navigation Items */}
-        {!user._id && (
-          <li
-            className="ml-4 p-4  rounded-xl  duration-300 transform transition duration-500 
-            hover:scale-110 cursor-pointer  w-[100%]"
-          >
-            {" "}
-            <div style={{ display: "flex" }}>
-              {" "}
-              <Link
-                name="login"
-                className="btn"
-                style={{ float: "left" }}
-                to="/login"
-              >
-                <IoLogIn /> Login
-                {}
+      <header className="bg-white py-2 border-b">
+        <div className="container max-w-screen-xl mx-auto px-4">
+          <div className="flex flex-wrap items-center">
+            <div className="flex-shrink-0 mr-5">
+              <Link to="/">
+                <img
+                  src="vite.svg"
+                  style={{ height: "50px", width: "60px" }}
+                  height="40"
+                  width="120"
+                  alt="BuyItNow"
+                />
               </Link>
             </div>
-          </li>
-        )}
-        {user._id && (
-          <li
-            className="ml-4 p-4   rounded-xl    w-[100%]"
-          >
-            <div
-              onClick={toggleAvatarDropdown}
-              className="relative  transition-all duration-500"
-            >
-              <img
-                className=" w-[60px] rounded-full duration-300 transform transition duration-500 
-                hover:scale-110 cursor-pointer"
-                src={!user?.avatar?.url ? "/vite.svg" : user?.avatar?.url}
-                alt="avatar"
-              />{" "}
-              <div
-                className={`absolute ${
-                  openAvatarDropdown ? "block" : "hidden"
-                } bg-slate-300 rounded shadow-md mt-2 space-y-2`}
-              >
-                <div className="p-4 flex flex-col bg-purple-900 text-white 0 rounded shadow-md  space-y-2 w-[200px] ">
-                  <Link
-                      onClick={() => {
-                        handleNav();
-                        toggleAvatarDropdown();
-                      }}
-                    to="/profile"
-                  >
-                    <MdAccountCircle />
-                    Profile
-                  </Link>
-                  <hr className="h-px  bg-gray-200 border-0 dark:bg-gray-700" />
+            {/* <Search /> */}
 
-                  {/* <Link to="/dashboard">Dashboard</Link> */}
-                  <Link
-                    name="logout"
-                    variant="gradient"
-                    size="sm"
-                    className="bg-auto"
-                    onClick={() => {
-                      logout();
-                      setUser({});
-                    }}
-                  >
-                    <IoLogOut /> Logout
-                  </Link>
-                </div>
-              </div>
+            <div className="flex items-center space-x-2 ml-auto">
+              <Link
+                to="/cart"
+                className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
+              >
+                <i className="text-gray-400 w-5 fa fa-shopping-cart"></i>
+                <span className="hidden lg:inline ml-1">
+                  Cart (<b>0</b>)
+                </span>
+              </Link>
+              {!user._id && (   <Link
+                to="/login"
+                className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
+              >
+                <i className="text-gray-400 w-5 fa fa-user"></i>
+                <span className="hidden lg:inline ml-1">Sign in </span>
+              </Link>)}
+              {user._id && (
+                <Link to="/profile">
+                  <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer">
+                    <img
+                      className="w-10 h-10 rounded-full"
+                      src={"default-avatar-photo-placeholder-icon-grey-vector-38594394-4024012845.jpg"}
+                    />
+                    <div className="space-y-1 font-medium">
+                      <p>
+                        Ghulam
+                        <time className="block text-sm text-gray-500 dark:text-gray-400">
+                          test@gmail.com
+                        </time>
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              )}
             </div>
-          </li>
-        )}
-      </ul>
-    </div>
+
+            <div className="lg:hidden ml-2">
+              <button
+                type="button"
+                className="bg-white p-3 inline-flex items-center rounded-md text-black hover:bg-gray-200 hover:text-gray-800 border border-transparent"
+              >
+                <span className="sr-only">Open menu</span>
+                <i className="fa fa-bars fa-lg"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+  
   );
 }
+
+// import { Link } from "react-router-dom";
+// // import Search from "./Search";
+
+// const Header = () => {
+//   return (
+//     <header className="bg-white py-2 border-b">
+//       <div className="container max-w-screen-xl mx-auto px-4">
+//         <div className="flex flex-wrap items-center">
+//           <div className="flex-shrink-0 mr-5">
+//             <a href="/">
+//               <img
+//                 src="logo192.png"
+//                 style={{ height: "50px", width: "60px" }}
+//                 height="40"
+//                 width="120"
+//                 alt="BuyItNow"
+//               />
+//             </a>
+//           </div>
+//           {/* <Search /> */}
+
+//           <div className="flex items-center space-x-2 ml-auto">
+//             <Link
+//               to="/cart"
+//               className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
+//             >
+//               <i className="text-gray-400 w-5 fa fa-shopping-cart"></i>
+//               <span className="hidden lg:inline ml-1">
+//                 Cart (<b>0</b>)
+//               </span>
+//             </Link>
+//             <Link
+//               to="/login"
+//               className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
+//             >
+//               <i className="text-gray-400 w-5 fa fa-user"></i>
+//               <span className="hidden lg:inline ml-1">Sign in</span>
+//             </Link>
+//             <Link to="/me">
+//               <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer">
+//                 <img className="w-10 h-10 rounded-full" src={"logo192.png"} />
+//                 <div className="space-y-1 font-medium">
+//                   <p>
+//                     Ghulam
+//                     <time className="block text-sm text-gray-500 dark:text-gray-400">
+//                       test@gmail.com
+//                     </time>
+//                   </p>
+//                 </div>
+//               </div>
+//             </Link>
+//           </div>
+
+//           <div className="lg:hidden ml-2">
+//             <button
+//               type="button"
+//               className="bg-white p-3 inline-flex items-center rounded-md text-black hover:bg-gray-200 hover:text-gray-800 border border-transparent"
+//             >
+//               <span className="sr-only">Open menu</span>
+//               <i className="fa fa-bars fa-lg"></i>
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </header>
+//   );
+// };
+
+// export default Header;
