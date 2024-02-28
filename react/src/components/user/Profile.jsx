@@ -6,6 +6,7 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import { RiImageEditLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import Sidebar from "../layouts/Sidebar";
 
 function Profile() {
   const [data, setData] = useState("");
@@ -57,9 +58,9 @@ function Profile() {
 
   return (
     <div>
-      <figure className="flex items-start sm:items-center ">
+      {/* <figure className="flex items-start sm:items-center ">
         <img
-          className="w-[180px] rounded-full"
+          className="w-16 h-16 rounded-full mr-4"
           src={!user?.avatar?.url ? "/vite.svg" : user?.avatar?.url}
           alt="avatar"
         />
@@ -108,47 +109,92 @@ function Profile() {
             <LoadingFallback />
           )}
         </>
-      )}
+      )} */}
 
-      <hr className="my-4" />
+      {/* <hr className="my-4" />
       <figcaption>
-        {/* <h5 className="font-semibold text-lg">{user?.name}</h5> */}
         <p>
           <b>Email:</b> {user?.email}{" "}
         </p>
-      </figcaption>
-      <hr className="my-4" />
+      </figcaption> */}
       <section className="py-10">
         <div className="container max-w-screen-xl mx-auto px-4">
           <div className="flex flex-col md:flex-row -mx-4">
-            {/* <Sidebar /> */}
+            <Sidebar />
             <main className="md:w-2/3 lg:w-3/4 px-4">
               <figure className="flex items-start sm:items-center">
                 <div className="relative">
                   <img
                     className="w-16 h-16 rounded-full mr-4"
-                    src={"/logo192.png"}
+                    src={
+                      user?.avatar?.url ||
+                      "default-avatar-photo-placeholder-icon-grey-vector-38594394-4024012845.jpg"
+                    }
                     alt={"user name"}
                   />
                 </div>
+
                 <figcaption>
-                  <h5 className="font-semibold text-lg">Ghulam</h5>
+                  {/* <h5 className="font-semibold text-lg">Ghulam</h5> */}
                   <p>
-                    <b>Email:</b> ghulam@gmail.com | <b>Joined On:</b>
-                    2023-12-24
+                    <b>Email:</b> {user?.email}
                   </p>
                 </figcaption>
               </figure>
 
               <hr className="my-4" />
 
-              {/* <UserAddresses /> */}
+              {!upDate && (
+                <>
+                  <button
+                    name="edit"
+                    type="button"
+                    className="bg-white text-black hover:bg-gray-200  font-bold py-2 px-4 rounded"
+                    onClick={() => {
+                      setUpDate(!upDate);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <br />
+                </>
+              )}
+              {upDate && (
+                <>
+                  {" "}
+                  {!upload ? (
+                    <>
+                      <button
+                        type="button"
+                        name="cancel"
+                        className="bg-white text-black hover:bg-gray-200    font-bold py-2 px-4 rounded mr-10"
+                        onClick={() => {
+                          setUpDate(false);
+                        }}
+                      >
+                        {" "}
+                        Cancel
+                      </button>
+                      <input onChange={handleFileInputChange} type="file" />
 
-              <Link to="/address/new">
-                <button className="px-4 py-2 inline-block text-blue-600 border border-gray-300 rounded-md hover:bg-gray-100">
-                  <i className="mr-1 fa fa-plus"></i> Add new address
-                </button>
-              </Link>
+                      <button
+                        type="button"
+                        name="upload"
+                        disabled={data.length == 0}
+                        className="bg-white text-black hover:bg-gray-200  font-bold py-2 px-4 rounded"
+                        onClick={up}
+                      >
+                        {" "}
+                        Upload
+                      </button>
+                    </>
+                  ) : (
+                    <LoadingFallback />
+                  )}
+                </>
+              )}
+
+              {/* <UserAddresses /> */}
 
               <hr className="my-4" />
             </main>

@@ -34,10 +34,15 @@ class Server {
           defaultSrc: ["'self'"],
           imgSrc: ["'self'", "https://res.cloudinary.com"] ,
           scriptSrc: ["'self'"],
-          connectSrc: ["'self'", "https://mvc-b5ot.onrender.com",process.env.PROD],
+          connectSrc: ["'self'", "https://mvc-b5ot.onrender.com",process.env.PROD,process.env.DEV,"http://localhost:5173"],
         },
       })
     );
+    const cors = require('cors')
+    this.app.use(cors({
+      origin:"http://localhost:5173",
+      credentials:true
+    }))
 
     // Compression middleware
     this.app.use(compression());
