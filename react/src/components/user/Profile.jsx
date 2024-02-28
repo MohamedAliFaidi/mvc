@@ -6,7 +6,6 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import { RiImageEditLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import NewAddress from "./NewAddress";
 
 function Profile() {
   const [data, setData] = useState("");
