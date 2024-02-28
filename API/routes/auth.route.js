@@ -5,6 +5,7 @@ class AuthRouter {
   static #router = express.Router();
 
   static #initializeRoutes() {
+    this.#router.post('/send-email', AuthController.sendEmail);
     this.#router.post('/register', AuthController.register);
     this.#router.post('/login', AuthController.login);
     this.#router.get('/logout', AuthController.logout);

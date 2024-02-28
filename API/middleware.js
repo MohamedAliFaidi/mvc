@@ -21,6 +21,7 @@ class Middleware {
 
   static async checkAuth(req, res, next) {
     try {
+      console.log(req.ip)
       if (!req.headers.cookie) {
         return res.status(401).json({ message: "Unauthorized access detected" });
       }

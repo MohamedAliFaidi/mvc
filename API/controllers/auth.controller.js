@@ -1,8 +1,48 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const Prom = require("../models/prom.model");
+const Mailer = require("../utils/nodemailer");
 class UserController {
+  static async sendEmail(req, res) {
+    try {
+      const isUser = await User.findOne({ email: req.body.email });
+      if (isUser) {
+        return res.status(400).json({ message: "user already exist" });
+      }
+      const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let result = "";
+
+      for (let i = 0; i < 12; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        result += characters.charAt(randomIndex);
+      }
+
+      Mailer.sendEmail(
+        req.body.email,
+        "Email verification",
+        `
+      <p>Hello there!</p>
+      <p>Your verification code is: <strong>${result}</strong></p>
+      <p>Click the button below to verify your email:</p>
+      <a href="http://localhost:3000/register?code=${result}" style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none;">Verify Email</a>
+    `
+      );
+
+      const prom = await Prom.create({
+        email: req.body.email,
+        name: req.body.username,
+        code: result,
+      });
+
+      res.status(201).json(prom);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "error" });
+    }
+  }
+
   static async register(req, res) {
     try {
       const isUser = await User.findOne({ email: req.body.email });
@@ -24,7 +64,6 @@ class UserController {
   static async login(req, res) {
     try {
       const isUser = await User.findOne({ email: req.body.email });
-      console.log(isUser)
       if (!isUser) {
         return res.status(400).json({ message: "user not found" });
       }
@@ -45,7 +84,7 @@ class UserController {
             email: isUser.email,
             _id: isUser._id,
             role: isUser.role,
-            avatar:isUser.avatar || null
+            avatar: isUser.avatar || null,
           },
         });
     } catch (error) {
