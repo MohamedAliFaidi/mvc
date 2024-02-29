@@ -2,10 +2,7 @@ import { useState } from "react";
 import { useUser } from "../../stores/userStore";
 import { axiosClient } from "../../utils/axiosClient";
 import LoadingFallback from "../layouts/Loading";
-import { FaCloudUploadAlt } from "react-icons/fa";
-import { MdCancel } from "react-icons/md";
-import { RiImageEditLine } from "react-icons/ri";
-import { Link } from "react-router-dom";
+
 import Sidebar from "../layouts/Sidebar";
 
 function Profile() {
@@ -58,65 +55,6 @@ function Profile() {
 
   return (
     <div>
-      {/* <figure className="flex items-start sm:items-center ">
-        <img
-          className="w-16 h-16 rounded-full mr-4"
-          src={!user?.avatar?.url ? "/vite.svg" : user?.avatar?.url}
-          alt="avatar"
-        />
-      </figure>
-      {!upDate && (
-        <button
-          name="edit"
-          type="button"
-          className="bg-black text-white hover:bg-gray-800  font-bold py-2 px-4 rounded"
-          onClick={() => {
-            setUpDate(!upDate);
-          }}
-        >
-          <RiImageEditLine />
-        </button>
-      )}
-      {upDate && (
-        <>
-          {" "}
-          <input onChange={handleFileInputChange} type="file" />
-          {!upload ? (
-            <>
-              <button
-                type="button"
-                name="cancel"
-                className="bg-black text-white hover:bg-gray-800    font-bold py-2 px-4 rounded mr-10"
-                onClick={() => {
-                  setUpDate(false);
-                }}
-              >
-                {" "}
-                <MdCancel />
-              </button>
-              <button
-                type="button"
-                name="upload"
-                disabled={data.length == 0}
-                className="bg-black text-white hover:bg-gray-800  font-bold py-2 px-4 rounded"
-                onClick={up}
-              >
-                {" "}
-                <FaCloudUploadAlt />
-              </button>
-            </>
-          ) : (
-            <LoadingFallback />
-          )}
-        </>
-      )} */}
-
-      {/* <hr className="my-4" />
-      <figcaption>
-        <p>
-          <b>Email:</b> {user?.email}{" "}
-        </p>
-      </figcaption> */}
       <section className="py-10">
         <div className="container max-w-screen-xl mx-auto px-4">
           <div className="flex flex-col md:flex-row -mx-4">

@@ -27,12 +27,22 @@ export const login = async (email, password) => {
   );
 };
 
-export const register = async (email, password) => {
-  return await axiosClient.post("/auth/register", {
+
+export const sendEmail = async (username, email) => {
+  return await axiosClient.post("/auth/send-email", {
+    username: username,
     email: email,
+  });
+};
+
+export const register = async ( password) => {
+  return await axiosClient.post("/auth/register", {
+    
     password: password,
   });
 };
+
+
 
 
 export const logout = async () => {

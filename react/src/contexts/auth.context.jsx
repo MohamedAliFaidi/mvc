@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useUser } from "../stores/userStore";
-import { login, register } from "../services/auth.service";
+import { login, register, sendEmail } from "../services/auth.service";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 export const AuthContext = createContext();
@@ -52,7 +52,40 @@ export const AuthProvider = ({ children }) => {
       .catch((error) => toast.error(error?.response?.data?.message));
   };
 
+  const emailHandler = (username, email) => {
+    sendEmail(username, email)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => console.log(err));
+  };
+
   const RegisterSchema = LoginSchema;
+
+  const userEmailSchema = Yup.object().shape({
+    email: Yup.string()
+      .required("Required")
+      .matches(constants.EMAIL_REGEX, "Invalid email"),
+    username: Yup.string()
+      .required("Please enter a username")
+      .min(6, "username must have at least 6 characters")
+    
+  });
+
+  const passwordSchema = Yup.object().shape({
+    password: Yup.string()
+    .required("Please enter a password")
+    .min(8, "Password must have at least 8 characters")
+    .matches(
+      constants.PASSWORD_REGEX,
+      "Use upper and lower case characters, digits and special character"
+    ),
+    confirmPassword: Yup.string()
+    .required("Please confirm your password")
+    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    
+    
+  });
 
   return (
     <AuthContext.Provider
@@ -61,6 +94,9 @@ export const AuthProvider = ({ children }) => {
         handleLogin,
         RegisterSchema,
         handleRegister,
+        passwordSchema,
+        userEmailSchema,
+        emailHandler
       }}
     >
       {children}

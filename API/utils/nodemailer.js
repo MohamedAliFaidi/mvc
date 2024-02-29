@@ -1,11 +1,9 @@
-// mailer.js
 
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 class Mailer {
   constructor() {
-    console.log(process.env)
     this.transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
       port: process.env.EMAIL_PORT,
