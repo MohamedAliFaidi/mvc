@@ -35,6 +35,14 @@ export const sendEmail = async (username, email) => {
   });
 };
 
+export const verifyCode = async (code) => {
+  return await axiosClient.post("/auth/register-code", {
+   code:code
+  });
+};
+
+
+
 export const register = async ( password) => {
   return await axiosClient.post("/auth/register", {
     

@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useUser } from "../stores/userStore";
-import { login, register, sendEmail } from "../services/auth.service";
+import { login, register, sendEmail ,verifyCode } from "../services/auth.service";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 export const AuthContext = createContext();
@@ -56,6 +56,7 @@ export const AuthProvider = ({ children }) => {
     sendEmail(username, email)
       .then((res) => {
         console.log(res)
+        toast.success("verification code sent to : "+email)
       })
       .catch((err) => console.log(err));
   };
@@ -96,7 +97,8 @@ export const AuthProvider = ({ children }) => {
         handleRegister,
         passwordSchema,
         userEmailSchema,
-        emailHandler
+        emailHandler,
+        verifyCode
       }}
     >
       {children}

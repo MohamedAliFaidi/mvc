@@ -6,19 +6,30 @@ import { lazy, Suspense } from "react";
 import LoadingFallback from "../layouts/Loading";
 const Password = lazy(() => import("./register-pieces/Password"));
 import Email from "./register-pieces/Email";
+import toast from "react-hot-toast";
 
 function Register() {
   const {
     handleRegister,
     RegisterSchema,
     passwordSchema,
+    verifyCode,
     userEmailSchema,
     emailHandler,
   } = useContext(AuthContext);
   const [iscode, setcode] = useState(false);
   const location = useLocation();
   useEffect(() => {
-    console.log(location.search.split("=")[1]);
+      if (location.search.split("=").includes("?code")) {
+      verifyCode(location.search.split("=")[1])
+        .then((res) => {
+          toast.success("account verified");
+          setcode(true);
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
+    }
   }, []);
 
   return (
@@ -26,9 +37,7 @@ function Register() {
       <h1 className="text-3xl font-semibold text-center text-black-700 uppercase">
         Sign up
       </h1>
-      <Email schema={userEmailSchema} handler={emailHandler} />*{" "}
-      
-   
+      {!iscode ? <Email schema={userEmailSchema} handler={emailHandler} /> : <Password/>}{" "}
       <p className="mt-8 text-xs font-light text-center text-gray-700">
         {" "}
         Already registred?{" "}
