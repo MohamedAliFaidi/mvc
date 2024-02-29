@@ -1,6 +1,5 @@
 import { axiosClient } from "../utils/axiosClient";
 
-
 export async function checkAuth(path) {
   try {
     await axiosClient.get(
@@ -16,7 +15,6 @@ export async function checkAuth(path) {
   }
 }
 
-
 export const login = async (email, password) => {
   return await axiosClient.post(
     "/auth/login",
@@ -27,7 +25,6 @@ export const login = async (email, password) => {
   );
 };
 
-
 export const sendEmail = async (username, email) => {
   return await axiosClient.post("/auth/send-email", {
     username: username,
@@ -37,21 +34,17 @@ export const sendEmail = async (username, email) => {
 
 export const verifyCode = async (code) => {
   return await axiosClient.post("/auth/register-code", {
-   code:code
+    code: code,
   });
 };
 
-
-
-export const register = async ( password) => {
+export const register = async (username, email, password) => {
   return await axiosClient.post("/auth/register", {
-    
+    username: username,
+    email: email,
     password: password,
   });
 };
-
-
-
 
 export const logout = async () => {
   return await axiosClient

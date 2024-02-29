@@ -1,5 +1,4 @@
 import { Link, useLocation } from "react-router-dom";
-import { Formik, Form, Field } from "formik";
 import AuthContext from "../../contexts/auth.context";
 import { useContext, useEffect, useState } from "react";
 import { lazy, Suspense } from "react";
@@ -11,18 +10,22 @@ import toast from "react-hot-toast";
 function Register() {
   const {
     handleRegister,
-    RegisterSchema,
     passwordSchema,
     verifyCode,
     userEmailSchema,
     emailHandler,
   } = useContext(AuthContext);
   const [iscode, setcode] = useState(false);
+  const [username, setUserName] = useState("");
+  const [email, setEmail] = useState("");
   const location = useLocation();
   useEffect(() => {
-      if (location.search.split("=").includes("?code")) {
+    if (location.search.split("=").includes("?code")) {
       verifyCode(location.search.split("=")[1])
         .then((res) => {
+          console.log(res);
+          setEmail(res?.data?.email);
+          setUserName(res?.data?.name);
           toast.success("account verified");
           setcode(true);
         })
@@ -37,7 +40,15 @@ function Register() {
       <h1 className="text-3xl font-semibold text-center text-black-700 uppercase">
         Sign up
       </h1>
-      {!iscode ? <Email schema={userEmailSchema} handler={emailHandler} /> : <Password/>}{" "}
+      <Email
+        iscode={iscode}
+        email={email}
+        username={username}
+        schema={userEmailSchema}
+        handler={emailHandler}
+        handleRegister={handleRegister}
+        passwordSchema={passwordSchema}
+      />
       <p className="mt-8 text-xs font-light text-center text-gray-700">
         {" "}
         Already registred?{" "}

@@ -42,8 +42,8 @@ export const AuthProvider = ({ children }) => {
       })
       .catch((error) => toast.error(error?.response?.data?.message));
   };
-  const handleRegister = (email, password) => {
-    register(email, password)
+  const handleRegister = (username,email, password) => {
+    register(username,email, password)
       .then((res) => {
         console.log(res);
 
@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }) => {
       constants.PASSWORD_REGEX,
       "Use upper and lower case characters, digits and special character"
     ),
-    confirmPassword: Yup.string()
+    confirm: Yup.string()
     .required("Please confirm your password")
     .oneOf([Yup.ref('password'), null], 'Passwords must match')
     
