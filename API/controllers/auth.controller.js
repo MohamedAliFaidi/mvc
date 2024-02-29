@@ -64,6 +64,7 @@ class UserController {
       }
       const hash = await bcrypt.hash(req.body.password, 10);
       const newUser = await User.create({
+        username: req.body.username,  
         email: req.body.email,
         password: hash,
       });
