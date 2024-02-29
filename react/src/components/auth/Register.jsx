@@ -1,9 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import AuthContext from "../../contexts/auth.context";
 import { useContext, useEffect, useState } from "react";
-import { lazy, Suspense } from "react";
-import LoadingFallback from "../layouts/Loading";
-const Password = lazy(() => import("./register-pieces/Password"));
 import Email from "./register-pieces/Email";
 import toast from "react-hot-toast";
 

@@ -2,7 +2,6 @@ import { Formik, Form, Field } from "formik";
 import { lazy, Suspense } from "react";
 import LoadingFallback from "../../layouts/Loading";
 const Password = lazy(() => import("./Password"));
-
 function Email({
   schema,
   handler,

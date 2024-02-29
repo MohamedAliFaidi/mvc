@@ -20,10 +20,10 @@ export default defineConfig({
             // Split common React-related dependencies
 
             if (id.includes("@motionone")) {
-              return "@motionone_vendor";
+              return "one_vendor";
             }
             if (id.includes("axios")) {
-              return "axios_vendor";
+              return "two_vendor";
             }
 
             if (
@@ -31,34 +31,34 @@ export default defineConfig({
               id.includes("@remix-run") ||
               id.includes("react-router")
             ) {
-              return "@react-router_vendor";
+              return "three_vendor";
             }
             if (id.includes("@heroicons")) {
-              return "@heroicons_vendor";
+              return "four_vendor";
             }
             if (id.includes("react-hot-toast") || id.includes("zustand")) {
-              return "react-dom_vendor";
+              return "five_vendor";
             }
             if (id.includes("react-hot-toast")) {
-              return "react-hot-toast_vendor";
+              return "sixvendor";
             }
             if (id.includes("formik")) {
-              return "formik_vendor";
+              return "seven_vendor";
             }
             if (id.includes("yup")) {
-              return "yup_vendor";
+              return "eight_vendor";
             }
             if (id.includes("react_icons")) {
-              return "react_icons_vendor";
+              return "nine_vendor";
             }
 
             if (id.includes("react")) {
-              return "react_vendor";
+              return "ten_vendor";
             }
 
             // Split other third-party dependencies
             else {
-              return "other_vendor";
+              return "x_vendor";
             }
           }
         },

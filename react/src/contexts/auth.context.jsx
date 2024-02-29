@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useUser } from "../stores/userStore";
-import { login, register, sendEmail ,verifyCode } from "../services/auth.service";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 export const AuthContext = createContext();
@@ -31,34 +30,41 @@ export const AuthProvider = ({ children }) => {
         "Use upper and lower case characters, digits and special character"
       ),
   });
-  const handleLogin = (email, password) => {
-    login(email, password)
-      .then((res) => {
-        if (res && res.data?.user) {
-          setUser(res.data.user);
-          navigate("/");
-          toast.success(`Welcome back ${res.data.user.email.split("@")[0]}`);
-        }
-      })
-      .catch((error) => toast.error(error?.response?.data?.message));
-  };
-  const handleRegister = (username,email, password) => {
-    register(username,email, password)
-      .then((res) => {
-        console.log(res);
 
-        toast.success(`Welcome${""}`);
-      })
-      .catch((error) => toast.error(error?.response?.data?.message));
+  const handleLogin = async (email, password) => {
+    try {
+      const { login } = await import("../services/auth.service");
+      const res = await login(email, password);
+      if (res && res.data?.user) {
+        setUser(res.data.user);
+        navigate("/");
+        toast.success(`Welcome back ${res.data.user.email.split("@")[0]}`);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
   };
 
-  const emailHandler = (username, email) => {
-    sendEmail(username, email)
-      .then((res) => {
-        console.log(res)
-        toast.success("verification code sent to : "+email)
-      })
-      .catch((err) => console.log(err));
+  const handleRegister = async (username, email, password) => {
+    try {
+      const { register } = await import("../services/auth.service");
+      const res = await register(username, email, password);
+      console.log(res);
+      toast.success(`Welcome${""}`);
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
+  const emailHandler = async (username, email) => {
+    try {
+      const { sendEmail } = await import("../services/auth.service");
+      const res = await sendEmail(username, email);
+      console.log(res);
+      toast.success("verification code sent to : " + email);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const RegisterSchema = LoginSchema;
@@ -69,23 +75,20 @@ export const AuthProvider = ({ children }) => {
       .matches(constants.EMAIL_REGEX, "Invalid email"),
     username: Yup.string()
       .required("Please enter a username")
-      .min(6, "username must have at least 6 characters")
-    
+      .min(6, "username must have at least 6 characters"),
   });
 
   const passwordSchema = Yup.object().shape({
     password: Yup.string()
-    .required("Please enter a password")
-    .min(8, "Password must have at least 8 characters")
-    .matches(
-      constants.PASSWORD_REGEX,
-      "Use upper and lower case characters, digits and special character"
-    ),
+      .required("Please enter a password")
+      .min(8, "Password must have at least 8 characters")
+      .matches(
+        constants.PASSWORD_REGEX,
+        "Use upper and lower case characters, digits and special character"
+      ),
     confirm: Yup.string()
-    .required("Please confirm your password")
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    
-    
+      .required("Please confirm your password")
+      .oneOf([Yup.ref("password"), null], "Passwords must match"),
   });
 
   return (
@@ -98,7 +101,6 @@ export const AuthProvider = ({ children }) => {
         passwordSchema,
         userEmailSchema,
         emailHandler,
-        verifyCode
       }}
     >
       {children}
