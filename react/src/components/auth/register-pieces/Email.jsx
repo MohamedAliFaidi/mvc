@@ -98,7 +98,7 @@ function Email({
             {/* <a href="#" className="text-xs text-purple-600 hover:underline">
         Forget Password?
       </a> */}
-            <div className="mt-6">
+            <div className={iscode ?  "invisible" : "mt-6"}>
               <button
                 type="submit"
                 name="submit"

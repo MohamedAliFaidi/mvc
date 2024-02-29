@@ -10,6 +10,10 @@ class UserController {
       if (!prom) {
         return res.status(400).json({ message: "invalid verification link" });
       }
+      const isUser = await User.findOne({ email: prom.email });
+      if (isUser) {
+        return res.status(400).json({ message: "user already exist" });
+      }
       res.status(200).json(prom);
     } catch (error) {
       console.log(error);
@@ -63,11 +67,13 @@ class UserController {
         return res.status(400).json({ message: "user already exist" });
       }
       const hash = await bcrypt.hash(req.body.password, 10);
-      const newUser = await User.create({
-        username: req.body.username,  
+      await User.create({
+        username: req.body.username,
         email: req.body.email,
         password: hash,
       });
+      const deleteProm = await Prom.deleteMany({ email: req.body.email });
+      console.log(deleteProm);
       res.status(201).json({ message: "ok" });
     } catch (error) {
       console.log(error);
