@@ -42,6 +42,7 @@ class UserController {
       <p>Hello there!</p>
       <p>Your verification code is: <strong>${result}</strong></p>
       <p>Click the button below to verify your email:</p>
+      <a href="http://localhost:5173/register?code=${result}">Production test</a>
       <a href="http://localhost:5173/register?code=${result}">dev link</a>
       <a href="http://localhost:3000/register?code=${result}" style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none;">Verify Email</a>
     `
