@@ -67,7 +67,13 @@ class Server {
     if (process.env.NODE_ENV == "production") {
       this.app.use(express.static(path.join(__dirname, "./")));
       this.app.get("*", (req, res) => {
-        console.log(req.ip)
+        console.log("===============================================================================================")
+        console.log(req)
+        console.log("===============================================================================================")
+        console.log(req.headers)
+        console.log("===============================================================================================")
+
+
         res.status(200).sendFile(path.join(__dirname, "./", "index.html"));
       });
     } else {
