@@ -34,7 +34,7 @@ class Server {
           defaultSrc: ["'self'"],
           imgSrc: ["'self'", "https://res.cloudinary.com"] ,
           scriptSrc: ["'self'"],
-          connectSrc: ["'self'", "https://mvc-b5ot.onrender.com",process.env.PROD,process.env.DEV,"http://localhost:5173","http://www.sitemaps.org"],
+          connectSrc: ["'self'", "https://mvc-b5ot.onrender.com",process.env.PROD,process.env.DEV,"http://localhost:5173"],
         },
       })
     );
