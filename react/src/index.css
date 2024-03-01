@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+footer {
+  @apply bg-gray-800 text-white text-center py-4 sticky bottom-0;
+}
+
+
 html {
   height: auto;
   margin: 0;
@@ -51,3 +56,4 @@ html {
     );
   }
 }
+

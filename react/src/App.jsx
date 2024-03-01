@@ -6,17 +6,13 @@ import Footer from "./components/layouts/Footer";
 import "./App.css";
 
 function App() {
-
-
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="max-w-7xl mx-auto">
+      <div className="flex-grow">
         <Body />
       </div>
-      <div className="max-w-7xl mx-auto">
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 }
