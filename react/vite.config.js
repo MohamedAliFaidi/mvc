@@ -2,21 +2,12 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import viteCompression from "vite-plugin-compression";
 import { splitVendorChunkPlugin } from "vite";
-import Pages from "vite-plugin-pages";
-import generateSitemap from "vite-plugin-pages-sitemap";
+
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    viteCompression(),
-    splitVendorChunkPlugin(),
-    Pages({
-      onRoutesGenerated: (routes) => generateSitemap({ routes }),
-    }),
-    VitePWA(),
-  ],
+  plugins: [react(), viteCompression(), splitVendorChunkPlugin(), VitePWA()],
   build: {
     outDir: "../dist",
     cssCodeSplit: true,
