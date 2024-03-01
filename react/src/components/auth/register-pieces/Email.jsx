@@ -1,16 +1,38 @@
 import { Formik, Form, Field } from "formik";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState, useCallback } from "react";
+import * as Yup from "yup";
+import toast from "react-hot-toast";
+
 import LoadingFallback from "../../layouts/Loading";
 const Password = lazy(() => import("./Password"));
-function Email({
-  schema,
-  handler,
-  iscode,
-  username,
-  email,
-  passwordSchema,
-  handleRegister,
-}) {
+function Email({ iscode, username, email }) {
+  const [EMAIL_REGEX] = useState(
+    /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  );
+  const [userEmailSchema] = useState(
+    Yup.object().shape({
+      email: Yup.string()
+        .required("Required")
+        .matches(EMAIL_REGEX, "Invalid email"),
+      username: Yup.string()
+        .required("Please enter a username")
+        .min(6, "username must have at least 6 characters"),
+    })
+  );
+  const emailHandler = useCallback(async (username, email) => {
+    try {
+      const { sendEmail } = await import("../../../services/auth.service");
+      const res = await sendEmail(username, email);
+      console.log(res.response);
+      if(res?.response?.data)
+      toast.error(res.response.data.message)
+      toast.success("verification code sent to : " + email);
+    } catch (err) {
+      toast.error(err.response.data.message)
+      console.log(err);
+    }
+  }, [toast]);
+
   return (
     <div>
       {" "}
@@ -19,9 +41,9 @@ function Email({
           username: "",
           email: "",
         }}
-        validationSchema={schema}
+        validationSchema={userEmailSchema}
         onSubmit={async (values) => {
-          await handler(values.username, values.email);
+          await emailHandler(values.username, values.email);
         }}
       >
         {({ errors, touched }) => (
@@ -97,7 +119,7 @@ function Email({
             {/* <a href="#" className="text-xs text-purple-600 hover:underline">
         Forget Password?
       </a> */}
-            <div className={iscode ?  "invisible" : "mt-6"}>
+            <div className={iscode ? "invisible" : "mt-6"}>
               <button
                 type="submit"
                 name="submit"
@@ -115,12 +137,7 @@ function Email({
       </Formik>
       {iscode && (
         <Suspense fallback={<LoadingFallback />}>
-          <Password
-            email={email}
-            username={username}
-            passwordSchema={passwordSchema}
-            handleRegister={handleRegister}
-          />
+          <Password email={email} username={username} />
         </Suspense>
       )}
     </div>

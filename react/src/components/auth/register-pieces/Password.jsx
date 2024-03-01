@@ -1,6 +1,37 @@
 import { Formik, Form, Field } from "formik";
+import { useState, useCallback } from "react";
+import * as Yup from "yup";
+import toast from "react-hot-toast";
 
-function Password({ handleRegister, passwordSchema, username, email }) {
+function Password({ username, email }) {
+  const [PASSWORD_REGEX] = useState(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$/
+  );
+  const [passwordSchema] = useState(
+    Yup.object().shape({
+      password: Yup.string()
+        .required("Please enter a password")
+        .min(8, "Password must have at least 8 characters")
+        .matches(
+          PASSWORD_REGEX,
+          "Use upper and lower case characters, digits and special character"
+        ),
+      confirm: Yup.string()
+        .required("Please confirm your password")
+        .oneOf([Yup.ref("password"), null], "Passwords must match"),
+    })
+  );
+  const handleRegister = useCallback(async (username, email, password) => {
+    try {
+      const { register } = await import("../../../services/auth.service");
+      const res = await register(username, email, password);
+      console.log(res);
+      toast.success(`Welcome${""}`);
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  }, []);
+
   return (
     <div>
       {" "}

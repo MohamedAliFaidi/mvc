@@ -1,7 +1,7 @@
 import LoadingFallback from "./Loading";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import { AuthProvider } from "../../contexts/auth.context";
+// import { AuthProvider } from "../../contexts/auth.context";
 import { AdminAuth } from "./routing/Admin";
 import { Auth } from "./routing/User";
 
@@ -22,21 +22,17 @@ function Body() {
         <Route
           path="/login"
           element={
-            <AuthProvider>
               <Suspense fallback={<LoadingFallback />}>
                 <Login />{" "}
               </Suspense>
-            </AuthProvider>
           }
         />
         <Route
           path="/register"
           element={
-            <AuthProvider>
               <Suspense fallback={<LoadingFallback />}>
                 <Register />{" "}
               </Suspense>
-            </AuthProvider>
           }
         />
         <Route

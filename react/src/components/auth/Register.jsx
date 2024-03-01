@@ -1,34 +1,44 @@
 import { Link, useLocation } from "react-router-dom";
-import AuthContext from "../../contexts/auth.context";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Email from "./register-pieces/Email";
 import toast from "react-hot-toast";
+import { useUser } from "../../stores/userStore";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
-  const {
-    handleRegister,
-    passwordSchema,
-    verifyCode,
-    userEmailSchema,
-    emailHandler,
-  } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [user] = useUser((state) => [state.user]);
   const [iscode, setcode] = useState(false);
   const [username, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const location = useLocation();
   useEffect(() => {
+    user.email && navigate("/");
+  }, [user]);
+  const loadAndUseVerifCode = useCallback(() => {
+    import("../../services/auth.service")
+      .then((module) => {
+        module
+          .verifyCode(location.search.split("=")[1])
+          .then((res) => {
+            console.log(res);
+            setEmail(res?.data?.email);
+            setUserName(res?.data?.name);
+            toast.success("account verified");
+            setcode(true);
+          })
+          .catch((error) => {
+            toast.error(error.response.data.message);
+          });
+      })
+      .catch((error) => {
+        console.error("Dynamic import failed:", error);
+      });
+  }, [setEmail, setUserName, setcode, toast]);
+
+  useEffect(() => {
     if (location.search.split("=").includes("?code")) {
-      verifyCode(location.search.split("=")[1])
-        .then((res) => {
-          console.log(res);
-          setEmail(res?.data?.email);
-          setUserName(res?.data?.name);
-          toast.success("account verified");
-          setcode(true);
-        })
-        .catch((error) => {
-          toast.error(error.response.data.message);
-        });
+      loadAndUseVerifCode();
     }
   }, []);
 
@@ -37,15 +47,7 @@ function Register() {
       <h1 className="text-3xl font-semibold text-center text-black-700 uppercase">
         Sign up
       </h1>
-      <Email
-        iscode={iscode}
-        email={email}
-        username={username}
-        schema={userEmailSchema}
-        handler={emailHandler}
-        handleRegister={handleRegister}
-        passwordSchema={passwordSchema}
-      />
+      <Email iscode={iscode} email={email} username={username} />
       <p className="mt-8 text-xs font-light text-center text-gray-700">
         {" "}
         Already registred?{" "}

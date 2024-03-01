@@ -1,10 +1,70 @@
 import { Link } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
-import AuthContext from "../../contexts/auth.context";
-import { useContext } from "react";
+import * as Yup from "yup";
+import toast from "react-hot-toast";
+
+import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../../stores/userStore";
 
 function Login() {
-  const { LoginSchema, handleLogin } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [user, setUser] = useUser((state) => [state.user, state.setUser]);
+
+  useEffect(() => {
+    user.email && navigate("/");
+  }, [user]);
+  const [constants] = useState({
+    EMAIL_REGEX:
+      /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    PASSWORD_REGEX:
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}$/,
+  });
+  const [schema] = useState(
+    Yup.object().shape({
+      email: Yup.string()
+        .required("Required")
+        .matches(constants.EMAIL_REGEX, "Invalid email"),
+      password: Yup.string()
+        .required("Please enter a password")
+        .min(8, "Password must have at least 8 characters")
+        .matches(
+          constants.PASSWORD_REGEX,
+          "Use upper and lower case characters, digits and special character"
+        ),
+    })
+  );
+  const loadAndUseLogin = useCallback(
+    (email, password) => {
+      import("../../services/auth.service")
+        .then((module) => {
+          module
+            .login(email, password)
+            .then((res) => {
+              if (res && res.data?.user) {
+                setUser(res.data.user);
+                navigate("/");
+                toast.success(
+                  `Welcome back ${res.data.user.email.split("@")[0]}`
+                );
+              }
+            })
+            .catch((error) => {
+              toast.error(error.response.data.message);
+            });
+        })
+        .catch((error) => {
+          console.error("Dynamic import failed:", error);
+        });
+    },
+    [setUser, navigate]
+  );
+  const handleLogin = useCallback(
+    (email, password) => {
+      loadAndUseLogin(email, password);
+    },
+    []
+  );
 
   return (
     <div className="w-full p-6 m-auto  rounded-md shadow-xl lg:max-w-xl bg-gradient-to-r   from-purple-50 via-pink100 to-pink-50 duration-500 ">
@@ -16,9 +76,9 @@ function Login() {
           email: "",
           password: "",
         }}
-        validationSchema={LoginSchema}
-        onSubmit={async (values) => {
-          await handleLogin(values.email, values.password);
+        validationSchema={schema}
+        onSubmit={(values) => {
+          handleLogin(values.email, values.password);
         }}
       >
         {({ errors, touched }) => (
