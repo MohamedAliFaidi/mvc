@@ -1,19 +1,14 @@
 import LoadingFallback from "./Loading";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
-// import { AuthProvider } from "../../contexts/auth.context";
-import { AdminAuth } from "./routing/Admin";
-import { Auth } from "./routing/User";
+
 
 const Login = lazy(() => import("../auth/Login"));
 
 const Register = lazy(() => import("../auth/Register"));
-
-const Profile = lazy(() => import("../user/Profile"));
-
+const Profile = lazy(() => import("../user/ProfileIndex"));
 const Home = lazy(() => import("../home/Home"));
-
-const Admin = lazy(() => import("../admin/Admin"));
+const Admin = lazy(() => import("../admin/AdminIndex"));
 
 function Body() {
   return (
@@ -38,21 +33,17 @@ function Body() {
         <Route
           path="/admin"
           element={
-            <AdminAuth>
-              <Suspense fallback={<LoadingFallback />}>
+            <Suspense fallback={<LoadingFallback />}>
                 <Admin />
               </Suspense>
-            </AdminAuth>
           }
         />
         <Route
           path="/profile"
           element={
-            <Auth>
-              <Suspense fallback={<LoadingFallback />}>
+            <Suspense fallback={<LoadingFallback />}>
                 <Profile />
               </Suspense>
-            </Auth>
           }
         />
         <Route

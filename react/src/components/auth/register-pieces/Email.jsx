@@ -19,19 +19,26 @@ function Email({ iscode, username, email }) {
         .min(6, "username must have at least 6 characters"),
     })
   );
-  const emailHandler = useCallback(async (username, email) => {
-    try {
-      const { sendEmail } = await import("../../../services/auth.service");
-      const res = await sendEmail(username, email);
-      console.log(res.response);
-      if(res?.response?.data)
-      toast.error(res.response.data.message)
-      toast.success("verification code sent to : " + email);
-    } catch (err) {
-      toast.error(err.response.data.message)
-      console.log(err);
-    }
-  }, [toast]);
+  const emailHandler = useCallback(
+    async (username, email) => {
+      import("../../../services/auth.service")
+        .then((module) => {
+          module
+            .sendEmail(username, email)
+            .then((res) => {
+              if (res?.response?.data) toast.error(res.response.data.message);
+              toast.success("verification code sent to : " + email);
+            })
+            .catch((error) => {
+              toast.error(error.response.data.message);
+            });
+        })
+        .catch((error) => {
+          console.error("Dynamic import failed:", error);
+        });
+    },
+    [toast]
+  );
 
   return (
     <div>

@@ -1,11 +1,9 @@
 import "./App.css";
 
 import Navbar from "./components/layouts/Navbar";
-
 import Body from "./components/layouts/Body";
-
-import "./App.css";
 import Footer from "./components/layouts/Footer";
+import "./App.css";
 
 function App() {
 
