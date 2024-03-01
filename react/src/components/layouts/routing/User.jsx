@@ -5,7 +5,6 @@ import { Navigate } from "react-router-dom";
 
 export function Auth({ children }) {
   const [isAuth, setIsAuth] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [setUser] = useUser((state) => [state.setUser]);
 
   useEffect(() => {
@@ -13,16 +12,14 @@ export function Auth({ children }) {
       .then((res) => {
         setIsAuth(res);
         if (res == false) setUser({});
-        setLoading(false);
       })
-      .catch(() => {
+      .catch((err) => {
         setUser({});
-        setIsAuth(false);
-        setLoading(false);
+        setIsAuth(null);
       });
   }, []);
 
-  if (loading) {
-    return null
-  } else return <>{isAuth ? children : <Navigate to="/login" />}</>;
+  return (
+    <>{isAuth != null ? isAuth ? children : <Navigate to="/login" /> : null}</>
+  );
 }
