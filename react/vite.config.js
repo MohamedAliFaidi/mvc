@@ -2,19 +2,29 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import viteCompression from "vite-plugin-compression";
 import { splitVendorChunkPlugin } from "vite";
+import Pages from "vite-plugin-pages";
+import generateSitemap from "vite-plugin-pages-sitemap";
+import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), viteCompression(), splitVendorChunkPlugin()],
+  plugins: [
+    react(),
+    viteCompression(),
+    splitVendorChunkPlugin(),
+    Pages({
+      onRoutesGenerated: (routes) => generateSitemap({ routes }),
+    }),
+    VitePWA(),
+  ],
   build: {
-    outDir:"../dist",
-    cssCodeSplit:true,
-    manifest:true,
-    sourcemap:true,
+    outDir: "../dist",
+    cssCodeSplit: true,
+    manifest: true,
     rollupOptions: {
       output: {
         manualChunks(id) {
-          console.log(id)
+          console.log(id);
           // Split third-party dependencies into smaller chunks
           if (id.includes("node_modules")) {
             // Split common React-related dependencies
