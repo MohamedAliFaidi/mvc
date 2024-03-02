@@ -7,19 +7,43 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), viteCompression(), splitVendorChunkPlugin(), VitePWA()],
+  plugins: [
+    react(),
+    viteCompression(),
+    splitVendorChunkPlugin(),
+    VitePWA({
+      manifest: {
+        name: "Your React Express App",
+        short_name: "React Express",
+        description: "Description of your React Express app",
+        start_url: "/",
+        display: "standalone",
+        theme_color: "#007bff", // Change this to your desired primary color
+        background_color: "#ffffff",
+        icons: [
+          {
+            src: "icon.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "icon-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+        ],
+      },
+    }),
+  ],
   build: {
     outDir: "../dist",
     cssCodeSplit: true,
-    manifest: true,
     rollupOptions: {
       output: {
         manualChunks(id) {
-          console.log(id);
           // Split third-party dependencies into smaller chunks
           if (id.includes("node_modules")) {
             // Split common React-related dependencies
-
             if (id.includes("@motionone")) {
               return "one_vendor";
             }
@@ -51,10 +75,6 @@ export default defineConfig({
             }
             if (id.includes("react_icons")) {
               return "nine_vendor";
-            }
-
-            if (id.includes("react")) {
-              return "ten_vendor";
             }
 
             // Split other third-party dependencies
