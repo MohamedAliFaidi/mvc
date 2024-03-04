@@ -6,9 +6,9 @@
   "scripts": {
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "build": "cd react &&  npm i &&  npm run build && cd .. && npm i && webpack",
+    "build": "npm i && webpack && cd react &&  npm i &&  npm run build",
     "dev": "cd react &&  npm run build && cd .. && nodemon index.js",
-    "start": "node dist/backend.js"
+    "start": "node backend.js"
   },
   "keywords": [],
   "author": "",

@@ -5,6 +5,8 @@ import Body from "./components/layouts/Body";
 import Footer from "./components/layouts/Footer";
 import "./App.css";
 
+console.log(import.meta.env)
+
 function App() {
   return (
     <div className="flex flex-col min-h-screen">

@@ -19,25 +19,8 @@ class Server {
     dotenv.config();
 
     // Helmet middleware for security
-    this.app.use(helmet());
-    this.app.use(helmet.hidePoweredBy());
-    this.app.use(helmet.frameguard({ action: "deny" }));
-    this.app.use(helmet.xssFilter());
-    this.app.use(helmet.noSniff());
-    this.app.use(helmet.ieNoOpen());
-    this.app.use(helmet.hsts({ maxAge: 90 * 24 * 60 * 60, force: true }));
-    this.app.use(helmet.dnsPrefetchControl());
-    this.app.use(
-      helmet.contentSecurityPolicy({
-        directives: {
-          
-          defaultSrc: ["'self'"],
-          imgSrc: ["'self'", "https://res.cloudinary.com"] ,
-          scriptSrc: ["'self'"],
-          connectSrc: ["'self'", "https://mvc-b5ot.onrender.com",process.env.PROD,process.env.DEV,"http://localhost:5173"],
-        },
-      })
-    );
+  
+    
     const cors = require('cors')
     this.app.use(cors({
       origin:"http://localhost:5173",
@@ -65,14 +48,14 @@ class Server {
     // Static files
 
     if (process.env.NODE_ENV == "production") {
-      this.app.use(express.static(path.join(__dirname, "./")));
+      this.app.use(express.static(path.join(__dirname, "./dist")));
       this.app.get("*", (req, res) => {
         console.log("===============================================================================================")
         console.log(req.headers)
         console.log("===============================================================================================")
 
 
-        res.status(200).sendFile(path.join(__dirname, "./", "index.html"));
+        res.status(200).sendFile(path.join(__dirname, "./dist", "index.html"));
       });
     } else {
       this.app.use(express.static(path.join(__dirname, "dist")));
@@ -93,3 +76,5 @@ class Server {
 
 // Create an instance of the Server class
 new Server();
+
+
