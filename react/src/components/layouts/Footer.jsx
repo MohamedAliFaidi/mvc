@@ -9,7 +9,7 @@ export default function Footer() {
           <Link to="/intro" className="mr-6 hover:underline">
             Intro
           </Link>
-          <Link to="/privacypolicy" className="hover:underline">
+          <Link to="/privacy-policy" className="hover:underline">
             Privacy Policy
           </Link>
         </div>

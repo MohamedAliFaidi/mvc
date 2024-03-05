@@ -7,6 +7,9 @@ const Register = lazy(() => import("../auth/Register"));
 const Profile = lazy(() => import("../user/ProfileIndex"));
 const Home = lazy(() => import("../home/Home"));
 const Admin = lazy(() => import("../admin/AdminIndex"));
+const Intro = lazy(() => import("../policy/Intro"));
+const PrivacyPolicy = lazy(() => import("../policy/PrivacyPolicy"));
+
 
 function Body() {
   return (
@@ -49,6 +52,22 @@ function Body() {
           element={
             <Suspense fallback={<LoadingFallback />}>
               <Home />
+            </Suspense>
+          }
+        />
+              <Route
+          path="/privacy-policy"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <PrivacyPolicy/>
+            </Suspense>
+          }
+        />
+              <Route
+          path="/intro"
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <Intro/>
             </Suspense>
           }
         />
