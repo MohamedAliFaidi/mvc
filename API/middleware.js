@@ -23,6 +23,7 @@ class Middleware {
 
   static async checkAuth(req, res, next) {
     try {
+      
   // add more verification 
       if (!req.headers.cookie) {
         return res

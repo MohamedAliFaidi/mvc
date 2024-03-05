@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const Prom = require("../models/prom.model");
 const Mailer = require("../utils/nodemailer");
 class UserController {
+
   static async verifyCode(req, res) {
     try {
       const prom = await Prom.findOne({ code: req.body.code });
@@ -20,6 +21,7 @@ class UserController {
       res.status(500).json(error);
     }
   }
+
   static async sendEmail(req, res) {
     try {
       const isUser = await User.findOne({ email: req.body.email });
@@ -29,12 +31,10 @@ class UserController {
       const characters =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       let result = "";
-
       for (let i = 0; i < 12; i++) {
         const randomIndex = Math.floor(Math.random() * characters.length);
         result += characters.charAt(randomIndex);
       }
-
       Mailer.sendEmail(
         req.body.email,
         "Email verification",
@@ -47,20 +47,17 @@ class UserController {
       <a href="http://localhost:3000/register?code=${result}" style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none;">Verify Email</a>
     `
       );
-
       const prom = await Prom.create({
         email: req.body.email,
         name: req.body.username,
         code: result,
       });
-
       res.status(201).json(prom);
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "error" });
     }
   }
-
   static async register(req, res) {
     try {
       const isUser = await User.findOne({ email: req.body.email });
@@ -97,14 +94,14 @@ class UserController {
         { id: isUser._id, exp, role: isUser.role },
         process.env.SECRET_KEY
       );
-      console.log(isUser)
+      console.log(isUser);
       res
         .cookie("Authorization", token)
         .status(200)
         .json({
           user: {
             email: isUser.email,
-            username:isUser.username,
+            username: isUser.username,
             _id: isUser._id,
             role: isUser.role,
             avatar: isUser.avatar || null,
@@ -125,6 +122,43 @@ class UserController {
       res.status(500).json({ message: "error" });
     }
   }
-}
+
+    static async oauth(req, res) {
+      try {
+        const {google} = require('googleapis');
+
+        /**
+         * To use OAuth2 authentication, we need access to a CLIENT_ID, CLIENT_SECRET, AND REDIRECT_URI
+         * from the client_secret.json file. To get these credentials for your application, visit
+         * https://console.cloud.google.com/apis/credentials.
+         */
+        const oauth2Client = new google.auth.OAuth2(
+         process.env.GOOGLE_ID,
+         process.env.GOOGLE_SECRET,
+         process.env.GOOGLE_REDIRECT
+        );
+        
+        // Access scopes for read-only Drive activity.
+        const scopes = [
+          "https://www.googleapis.com/auth/userinfo.profile"
+        ];
+        
+        // Generate a url that asks permissions for the Drive activity scope
+        const authorizationUrl = oauth2Client.generateAuthUrl({
+          // 'online' (default) or 'offline' (gets refresh_token)
+          access_type: 'offline',
+          /** Pass in the scopes array defined above.
+            * Alternatively, if only one scope is needed, you can pass a scope URL as a string */
+          scope: scopes,
+          // Enable incremental authorization. Recommended as a best practice.
+          include_granted_scopes: true
+        });
+        res.status(200).json({ authorizationUrl });
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "error" });
+      }
+    }
+  }
 
 module.exports = UserController;

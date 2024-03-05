@@ -9,6 +9,7 @@ class AuthRouter {
     this.#router.post("/register-code", AuthController.verifyCode);
     this.#router.post("/send-email", AuthController.sendEmail);
     this.#router.post("/login", AuthController.login);
+    this.#router.get("/oauth", AuthController.oauth);
     this.#router.get("/logout", AuthController.logout);
   }
 

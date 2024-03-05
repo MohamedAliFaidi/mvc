@@ -50,11 +50,6 @@ class Server {
     if (process.env.NODE_ENV == "production") {
       this.app.use(express.static(path.join(__dirname, "./dist")));
       this.app.get("*", (req, res) => {
-        console.log("===============================================================================================")
-        console.log(req.headers)
-        console.log("===============================================================================================")
-
-
         res.status(200).sendFile(path.join(__dirname, "./dist", "index.html"));
       });
     } else {
