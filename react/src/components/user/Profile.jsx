@@ -66,7 +66,7 @@ function Profile() {
                     className="w-16 h-16 rounded-full mr-4"
                     src={
                       user?.avatar?.url ||
-                      "default-avatar-photo-placeholder-icon-grey-vector-38594394-4024012845.jpg"
+                       "/avatar.jpg"
                     }
                     alt={"user name"}
                   />

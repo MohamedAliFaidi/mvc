@@ -3,9 +3,7 @@ import { useUser } from "../../stores/userStore";
 
 export default function StickyNavbar() {
   const [user] = useUser((state) => [state.user]);
-
-
-
+ console.log(user)
   return (
     <header className=" py-2 border-b">
       <div className="container max-w-screen-xl mx-auto px-4">
@@ -24,15 +22,6 @@ export default function StickyNavbar() {
           {/* <Search /> */}
 
           <div className="flex items-center space-x-2 ml-auto">
-            {/* <Link
-              to="/cart"
-              className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
-            >
-              <i className="text-gray-400 w-5 fa fa-shopping-cart"></i>
-              <span className=" lg:inline ml-1">
-                Cart (<b>0</b>)
-              </span>
-            </Link> */}
             {!user._id && (
               <Link
                 to="/login"
@@ -55,14 +44,14 @@ export default function StickyNavbar() {
                     className="w-10 h-10 rounded-full"
                     src={
                       user?.avatar?.url ||
-                      "default-avatar-photo-placeholder-icon-grey-vector-38594394-4024012845.jpg"
+                      "/avatar.jpg"
                     }
                   />
                   <div className="space-y-1 font-medium">
                     <p>
-                      Ghulam
+                      {user.username}
                       <time className="block text-sm text-gray-500 dark:text-gray-400">
-                        test@gmail.com
+                        {user.email}
                       </time>
                     </p>
                   </div>

@@ -97,12 +97,14 @@ class UserController {
         { id: isUser._id, exp, role: isUser.role },
         process.env.SECRET_KEY
       );
+      console.log(isUser)
       res
         .cookie("Authorization", token)
         .status(200)
         .json({
           user: {
             email: isUser.email,
+            username:isUser.username,
             _id: isUser._id,
             role: isUser.role,
             avatar: isUser.avatar || null,
